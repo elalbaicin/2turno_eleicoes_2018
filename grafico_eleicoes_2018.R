@@ -1,8 +1,8 @@
 # Biblioteca(s)
 library(tidyverse)
 
-# Construção de três cenários
-resultados <- tibble(Cenário = map(.x = c("... votado nulo",
+# ConstruÃ§Ã£o de trÃªs cenÃ¡rios
+resultados <- tibble(CenÃ¡rio = map(.x = c("... votado nulo",
                                           "... votado em Haddad",
                                           "... votado em Bolsonaro"),
                                    .f = rep,
@@ -19,12 +19,12 @@ resultados <- tibble(Cenário = map(.x = c("... votado nulo",
                                47040907,
                                57797848,
                                47040906)) %>% 
-  group_by(Cenário) %>% 
+  group_by(CenÃ¡rio) %>% 
   mutate(Percentual = round(100 * Votos / sum(Votos),
                             digits = 2) %>% 
            paste0("%"))
 
-# Gráfico com o resultado do segundo turno em cada cenário
+# GrÃ¡fico com o resultado do segundo turno em cada cenÃ¡rio
 (p <- ggplot(resultados,
              aes(x = Candidato,
                  y = Votos / 10 ^ 6,
@@ -33,13 +33,18 @@ resultados <- tibble(Cenário = map(.x = c("... votado nulo",
     geom_text(aes(label = Percentual),
               nudge_y = 1.5,
               show.legend = FALSE) +
-    facet_wrap(facets = vars(Cenário)) +
+    facet_wrap(facets = vars(CenÃ¡rio)) +
     scale_fill_manual(values = c("#34C771", 
                                  "#C5122D")) +
     ggtitle("Resultado do segundo turno de 2018 se eu tivesse...") +
     theme_bw() +
-    ylab("Milhões de votos") +
+    ylab("MilhÃµes de votos") +
     xlab("") +
     theme(axis.text.x = element_blank(),
           axis.ticks.x = element_blank(),
-          axis.title.y = element_text(size = 12)))
+          axis.title.y = element_text(size = 12),
+          title = element_text(size = 20),
+          strip.text = element_text(size = 12),
+          legend.title = element_text(size = 12),
+          legend.text = element_text(size = 12)) +
+    labs(caption = "Fonte: TSE; cÃ¡lculos do autor."))
